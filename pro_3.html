@@ -2,9 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
-<title>Главная</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Сайт с боковой панелью и белым текстом</title>
 <style>
-
   html, body {
     margin: 0; padding: 0; height: 100%;
     font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
   /* Левая панель */
   body > div > div:first-child {
     background: black;
-    color: white;
+    color: white; /* белый текст */
     width: 160px;
     display: flex;
     flex-direction: column;
@@ -47,6 +47,8 @@
   body > div > div:last-child > div {
     display: flex;
     gap: 40px;
+    flex-wrap: wrap;
+    max-width: 750px; /* чтобы блоки не растягивались слишком широко */
   }
   /* Карточки */
   body > div > div:last-child > div > div {
@@ -57,6 +59,16 @@
     padding: 20px;
     text-align: center;
     color: #222;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+  }
+  /* Картинки в карточках */
+  body > div > div:last-child > div > div img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    object-fit: cover;
   }
   body > div > div:last-child > div > div span {
     font-size: 48px;
@@ -68,23 +80,31 @@
   body > div > div:last-child > div > div h3 {
     margin: 0 0 10px 0;
   }
+  body > div > div:last-child > div > div h1 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+  }
   body > div > div:last-child > div > div p {
     margin: 0;
     font-size: 14px;
     color: #666;
   }
+  body > div > div:last-child > div {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-width: 750px;
+  margin-top: 200px; /* добавляем отступ сверху */
+}
   h1 {
-            text-align: center;
-          }
-          h4 {
-                 text-align: center;
-                 color: gray}
+    text-align: center;
+  }
 </style>
 </head>
 <body>
-<h1>Главная</h1>
-    <h4>Вы находитесь на сайте, предназначеном для продажи товаров.</h4>
+  <h1>Каталог</h1>
   <div>
+    <!-- Левая панель с белым текстом -->
     <div>
       <span>Главная</span>
       <span>Категории</span>
@@ -92,23 +112,32 @@
       <span>Контакты</span>
       <span>Пользователь</span>
     </div>
+    <!-- Центральная часть -->
     <div>
       <div>
         <div>
+          <img src="https://i3.wp.com/img.razrisyika.ru/kart/44/174220-cifra-1-dlya-detey-7.jpg?resize=728%2C728&ssl=1" />
           <h3>Товар 1</h3>
-            <h2>100$</h2>
-          <p>Что-то на английском</p>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
         </div>
         <div>
+          <img src="https://i.pinimg.com/170x/d6/a0/dc/d6a0dc4bf80fd15b20aec3b8c1859cd9.jpg" />
           <h3>Товар 2</h3>
-            <h2>100$</h2>
-          <p>Что-то на английском</p>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
         </div>
         <div>
+          <img src="https://avatars.mds.yandex.net/i?id=99b2a0a528f2a85ff50aaa0e13bcb5cb66b86e87-2816694-images-thumbs&n=13" />
           <h3>Товар 3</h3>
-            <h2>100$</h2>
-
-          <p>Что-то на английском</p>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
+        </div>
+        <div>
+          <img src="https://i.pinimg.com/474x/97/dc/8f/97dc8f79aa2d5d473e0ef0dc728abe5d.jpg"/>
+          <h3>Товар 4</h3>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
         </div>
       </div>
     </div>

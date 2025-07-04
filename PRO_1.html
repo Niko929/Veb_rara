@@ -2,9 +2,9 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
-<title>Главная</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Сайт с боковой панелью и белым текстом</title>
 <style>
-
   html, body {
     margin: 0; padding: 0; height: 100%;
     font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
   /* Левая панель */
   body > div > div:first-child {
     background: black;
-    color: white;
+    color: white; /* белый текст */
     width: 160px;
     display: flex;
     flex-direction: column;
@@ -47,6 +47,8 @@
   body > div > div:last-child > div {
     display: flex;
     gap: 40px;
+    flex-wrap: wrap;
+    max-width: 750px; /* чтобы блоки не растягивались слишком широко */
   }
   /* Карточки */
   body > div > div:last-child > div > div {
@@ -57,6 +59,7 @@
     padding: 20px;
     text-align: center;
     color: #222;
+    margin-bottom: 30px;
   }
   body > div > div:last-child > div > div span {
     font-size: 48px;
@@ -76,15 +79,12 @@
   h1 {
             text-align: center;
           }
-          h4 {
-                 text-align: center;
-                 color: gray}
 </style>
 </head>
 <body>
-<h1>Главная</h1>
-    <h4>Вы находитесь на сайте, предназначеном для продажи товаров.</h4>
+  <h1>Категория 1</h1>
   <div>
+    <!-- Левая панель с белым текстом -->
     <div>
       <span>Главная</span>
       <span>Категории</span>
@@ -92,23 +92,38 @@
       <span>Контакты</span>
       <span>Пользователь</span>
     </div>
+    <!-- Центральная часть -->
     <div>
       <div>
         <div>
           <h3>Товар 1</h3>
-            <h2>100$</h2>
-          <p>Что-то на английском</p>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
         </div>
         <div>
           <h3>Товар 2</h3>
-            <h2>100$</h2>
-          <p>Что-то на английском</p>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>>
         </div>
         <div>
           <h3>Товар 3</h3>
-            <h2>100$</h2>
-
-          <p>Что-то на английском</p>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
+        </div>
+        <div>
+          <h3>Товар 4</h3>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
+        </div>
+        <div>
+          <h3>Товар 5</h3>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
+        </div>
+        <div>
+          <h3>Товар 6</h3>
+          <h1>100$</h1>
+          <p>Описание товара на английском</p>
         </div>
       </div>
     </div>

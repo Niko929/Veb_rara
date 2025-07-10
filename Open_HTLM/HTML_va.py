@@ -15,7 +15,7 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        with open("pro.html", "r", encoding="utf-8") as file:
+        with open("../HTLM/pro.html", "r", encoding="utf-8") as file:
             html_content = file.read()
         self.wfile.write(bytes(html_content, "utf-8"))
     """ Метод для обработки входящих GET-запросов """

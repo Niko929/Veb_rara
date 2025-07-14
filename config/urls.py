@@ -5,7 +5,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('students.urls', namespace='students'))
+    path('', include('catalog.urls', namespace='catalog'))
 ]
 
 if settings.DEBUG:

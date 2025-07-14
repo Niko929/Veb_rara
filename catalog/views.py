@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 def home(request):
-    return render(request, 'students/home.html')
+    return render(request, 'catalog/home.html')
 
 # def contac(request):
 #     if request.method == 'GET':
@@ -15,5 +15,9 @@ def contact(request):
         message = request.POST.get("message")
         # Обработка данных формы
         return HttpResponse(f"Данные отправлены!{name}")
-    return render(request, 'students/contact.html')
+    return render(request, 'catalog/contact.html')
 
+from django.shortcuts import render
+
+def example_view(request):
+    return render(request, 'catalog/home.html')

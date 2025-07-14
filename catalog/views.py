@@ -17,7 +17,5 @@ def contact(request):
         return HttpResponse(f"Данные отправлены!{name}")
     return render(request, 'catalog/contact.html')
 
-from django.shortcuts import render
 
-def example_view(request):
-    return render(request, 'catalog/home.html')
+

@@ -4,9 +4,6 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'catalog/home.html')
 
-# def contac(request):
-#     if request.method == 'GET':
-#         return render(request, 'app/data.html')
 
 
 def contact(request):

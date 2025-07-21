@@ -1,81 +1,122 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Сайт с боковой панелью и белым текстом</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    color: #222;
+  }
+  body > div {
+    display: flex;
+    height: 100vh;
+  }
+  /* Левая панель */
+  body > div > div:first-child {
+    background: black;
+    color: white; /* белый текст */
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 10px;
+    box-sizing: border-box;
+  }
+  /* Пункты меню слева */
+  body > div > div:first-child span {
+    margin: 15px 0;
+    font-size: 18px;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  body > div > div:first-child span:hover {
+    text-decoration: underline;
+  }
+  /* Центральная часть */
+  body > div > div:last-child {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  body > div > div:last-child > div {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 750px; /* чтобы блоки не растягивались слишком широко */
+  }
+  /* Карточки */
+  body > div > div:last-child > div > div {
+    background: white;
+    width: 220px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    color: #222;
+    margin-bottom: 30px;
+  }
+  body > div > div:last-child > div > div span {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 15px;
+    color: #555;
+    user-select: none;
+  }
+  body > div > div:last-child > div > div h3 {
+    margin: 0 0 10px 0;
+  }
+  body > div > div:last-child > div > div p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+  }
+  h1 {
+    text-align: center;
+  }
+</style>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Skystore</title>
+    <title>Товар</title>
     <!-- Подключите статичеcкие файлы со стилями Bootstrap -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-
 </head>
 <body>
-<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">Skystore</h5>
-    <nav class="ms-5">
-        <a class="p-2 btn btn-outline-primary" href="/">Каталог</a>
-        <a class="p-2 btn btn-outline-primary" href="/contacts/">Контакты</a>
-    </nav>
-</div>
-
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-    <h1 class="display-4">Skystore</h1>
-    <p class="lead">Skystore - это отличный вариант хранения ваших плагинов и примеров кода, который вы бы хотели
-        продать</p>
-</div>
-
-<div class="container">
-    <div class="row text-center">
-        <div class="col-3">
-            <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Удобный сервис рассылок</h4>
-                </div>
-                <div class="card-body">
-                    <h1 class="card-title pricing-card-title">$ 140</h1>
-                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li>- Неограниченная лицензия</li>
-                        <li>- Поддержка</li>
-                        <li>- Установка на сервер</li>
-                        <li>- Получение обновлений</li>
-                    </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
-                </div>
-            </div>
-        </div>
+  <h1>Категория 1</h1>
+  <div>
+    <!-- Левая панель с белым текстом -->
+    <div>
+      <span>Главная</span>
+      <span>Категории</span>
+      <span>Заказы</span>
+      <span>Контакты</span>
+      <span>Пользователь</span>
     </div>
-
-    <footer class="pt-4 my-md-5 pt-md-5 border-top">
-        <div class="row">
-            <div class="col-12 col-md">
-                SkyStore
-                <small class="d-block mb-3 text-muted">&copy; 2023</small>
-            </div>
-            <div class="col-6 col-md">
-                <h5>Категории</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="text-muted" href="#">Рассылки</a></li>
-                    <li><a class="text-muted" href="#">Телеграм боты</a></li>
-                    <li><a class="text-muted" href="#">Полезные утилиты</a></li>
-                    <li><a class="text-muted" href="#">Веб-приложения</a></li>
-                    <li><a class="text-muted" href="#">Микросервисы</a></li>
-                </ul>
-            </div>
-            <div class="col-6 col-md">
-                <h5>Дополнительно</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="text-muted" href="#">Мы пишем</a></li>
-                </ul>
-            </div>
-            <div class="col-6 col-md">
-                <h5>О нас</h5>
-                <ul class="list-unstyled text-small">
-                    <li><a class="text-muted" href="/contacts/">Контакты</a></li>
-                </ul>
-            </div>
+    <!-- Центральная часть -->
+    <div>
+      <div>
+        {% for product in products %}
+        <div>
+          <h3>{{ product.name }}</h3>
+          <h1>{{ product.price }}$</h1>
+          <p>{{ product.description|truncatechars:100 }}</p>
+          {% if product.is_new %}
+            <span style="color: red; font-size: 12px;">Новинка!</span>
+          {% endif %}
         </div>
-    </footer>
-</div>
-<!-- Подключите статичеcкие файлы со скриптами Bootstrap -->
-<script src="static/js/bootstrap.bundle.min.js"></script>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+<div class="container mt-5">
+        {% block content %}{% endblock %}
+    </div>
+    <!-- Подключение Bootstrap JS -->
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

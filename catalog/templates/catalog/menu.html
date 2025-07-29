@@ -1,0 +1,8 @@
+<!-- catalog/templates/catalog/menu.html -->
+<nav class="navbar">
+    <ul class="menu">
+        <li><a href="{% url 'home' %}">Главная</a></li>
+        <li><a href="{% url 'product_detail' product.id %}">Товары</a></li>
+        <li><a href="{% url 'contacts' %}">Контакты</a></li>
+    </ul>
+</nav>

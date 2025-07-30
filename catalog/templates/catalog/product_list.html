@@ -1,0 +1,26 @@
+{% extends "catalog/base.html" %}
+{% load static %}  <!-- Добавьте эту строку в начало шаблона -->
+
+{% block title %}Каталог товаров{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Каталог товаров</h1>
+
+<div class="products-grid">
+    {% for product in products %}
+    <a href="{% url 'catalog:product_detail' product.id %}" class="product-card">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+        {% else %}
+            <img src="{% static 'images/default-product.png' %}" alt="No image" class="product-image">
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+        <div class="price">{{ product.price }} руб.</div>
+        <p>{{ product.description|truncatechars:100 }}</p>
+        {% if product.is_new %}
+            <span class="new-badge">Новинка!</span>
+        {% endif %}
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

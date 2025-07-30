@@ -2,20 +2,34 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Мой магазин{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}МойМагазин{% endblock %}</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
-    {% include 'catalog/menu.html' %}
+    <div class="page-wrapper">
+        <header class="header">
+            <a href="/" class="navbar-brand">МойМагазин</a>
+        </header>
 
-    <div class="content">
-        {% block content %}{% endblock %}
+        <div class="main-container">
+            <nav class="sidebar">
+                <a href="/">Главная</a>
+                <a href="/categories">Категории</a>
+                <a href="/orders">Заказы</a>
+                <a href="/contacts">Контакты</a>
+                <a href="/profile">Пользователь</a>
+            </nav>
+
+            <main class="main-content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
     </div>
 
-    <footer>
-        <!-- Ваш футер -->
-    </footer>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

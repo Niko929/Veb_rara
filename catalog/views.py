@@ -20,7 +20,8 @@ def home(request):
     return render(request, 'catalog/home.html',context)
 
 def new_menu(request):
-    return render(request, 'catalog/menu.html')
+    product = Product.objects.all()
+    return render(request, 'catalog/menu.html', {'product': product})
 
 
 
@@ -54,11 +55,13 @@ def contact(request):
 def new_cot(request):
     return render(request, 'catalog/new_cot.html')
 
-def product_detail(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    return render(request, 'catalog/one_produ.html', {'product': product})
+def product_detail(request, product_id):  # Имя параметра должно совпадать с URL
+    product = get_object_or_404(Product, id=product_id)
+    return render(request, 'catalog/product_list.html', {'product': product})
 
 def contacts(request):
     return render(request, 'catalog/contact.html')
 
-
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'catalog/menu.html', {'products': products})

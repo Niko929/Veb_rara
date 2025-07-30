@@ -1,193 +1,180 @@
 {% extends "catalog/base.html" %}
+{% load static %}
 {% block content %}
-<div class="product-list">
-    {% for product in products %}
-    <div class="product-card">
-        <a href="{% url 'product_detail' product.id %}">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            <h3>{{ product.name }}</h3>
-            <p>{{ product.description|truncatechars:100 }}</p>
-        </a>
+<div class="page-wrapper">
+    <!-- Шапка (черная) -->
+
+    <!-- Основной контейнер -->
+    <div class="main-container">
+        <!-- Боковая панель (слева) -->
+
+        <!-- Основное содержимое -->
+        <main class="main-content">
+            <h1 class="page-title">Каталог товаров</h1>
+
+            <div class="products-grid">
+                {% for product in products %}
+                <div class="product-card">
+                    <a href="{% url 'catalog:product_detail' product.id %}">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                        {% else %}
+                            <img src="/static/images/default-product.png" alt="No image available" class="product-image">
+                        {% endif %}
+                        <h3>{{ product.name }}</h3>
+                        <div class="price">{{ product.price }}$</div>
+                        <p>{{ product.description|truncatechars:100 }}</p>
+                        {% if product.is_new %}
+                            <span class="new-badge">Новинка!</span>
+                        {% endif %}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
     </div>
-    {% endfor %}
 </div>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+        color: #222;
+    }
 
-<!--<!DOCTYPE html>-->
-<!--<html lang="ru">-->
-<!--<head>-->
-<!--<meta charset="UTF-8" />-->
-<!--<meta name="viewport" content="width=device-width, initial-scale=1" />-->
-<!--<title>Интернет-магазин</title>-->
-<!--<style>-->
-<!--  html, body {-->
-<!--    margin: 0;-->
-<!--    padding: 0;-->
-<!--    height: 100%;-->
-<!--    font-family: Arial, sans-serif;-->
-<!--    background: #f0f0f0;-->
-<!--    color: #222;-->
-<!--  }-->
+    /* Основная структура */
+    .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-<!--  /* Основная структура */-->
-<!--  .page-wrapper {-->
-<!--    display: flex;-->
-<!--    flex-direction: column;-->
-<!--    min-height: 100vh;-->
-<!--  }-->
+    /* Шапка сайта (черная) */
+    .header {
+        background-color: #000;
+        color: white;
+        padding: 15px 20px;
+    }
 
-<!--  /* Шапка сайта (черная) */-->
-<!--  .header {-->
-<!--    background-color: #000;-->
-<!--    color: white;-->
-<!--    padding: 15px 20px;-->
-<!--  }-->
+    /* Логотип/название в шапке */
+    .navbar-brand {
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+    }
 
-<!--  /* Логотип/название в шапке */-->
-<!--  .navbar-brand {-->
-<!--    font-size: 24px;-->
-<!--    font-weight: bold;-->
-<!--    color: white;-->
-<!--    text-decoration: none;-->
-<!--  }-->
+    /* Основной контейнер с сайдбаром и контентом */
+    .main-container {
+        display: flex;
+        flex: 1;
+    }
 
-<!--  /* Основной контейнер с сайдбаром и контентом */-->
-<!--  .main-container {-->
-<!--    display: flex;-->
-<!--    flex: 1;-->
-<!--  }-->
+    /* Боковая панель (слева) */
+    .sidebar {
+        background: #000;
+        width: 200px;
+        padding: 20px;
+        box-sizing: border-box;
+    }
 
-<!--  /* Боковая панель (слева) */-->
-<!--  .sidebar {-->
-<!--    background: #000;-->
-<!--    width: 200px;-->
-<!--    padding: 20px;-->
-<!--    box-sizing: border-box;-->
-<!--  }-->
+    /* Пункты меню в боковой панели */
+    .sidebar a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 10px 0;
+        margin: 5px 0;
+        display: block;
+        white-space: nowrap;
+    }
 
-<!--  /* Пункты меню в боковой панели */-->
-<!--  .sidebar a {-->
-<!--    color: white;-->
-<!--    text-decoration: none;-->
-<!--    font-size: 18px;-->
-<!--    padding: 10px 0;-->
-<!--    margin: 5px 0;-->
-<!--    display: block;-->
-<!--    white-space: nowrap;-->
-<!--  }-->
+    .sidebar a:hover {
+        text-decoration: underline;
+    }
 
-<!--  .sidebar a:hover {-->
-<!--    text-decoration: underline;-->
-<!--  }-->
+    /* Основное содержимое */
+    .main-content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+    }
 
-<!--  /* Основное содержимое */-->
-<!--  .main-content {-->
-<!--    flex: 1;-->
-<!--    padding: 20px;-->
-<!--    overflow-y: auto;-->
-<!--  }-->
+    /* Заголовок страницы */
+    .page-title {
+        text-align: center;
+        margin: 20px 0 30px;
+        color: #333;
+    }
 
-<!--  /* Заголовок страницы */-->
-<!--  .page-title {-->
-<!--    text-align: center;-->
-<!--    margin: 20px 0 30px;-->
-<!--    color: #333;-->
-<!--  }-->
+    /* Сетка товаров */
+    .products-grid {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-<!--  /* Сетка товаров */-->
-<!--  .products-grid {-->
-<!--    display: flex;-->
-<!--    gap: 40px;-->
-<!--    flex-wrap: wrap;-->
-<!--    justify-content: center;-->
-<!--    max-width: 1200px;-->
-<!--    margin: 0 auto;-->
-<!--  }-->
+    /* Карточки товаров */
+    .product-card {
+        background: white;
+        width: 220px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        padding: 20px;
+        text-align: center;
+        color: #222;
+        margin-bottom: 30px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+        display: block;
+    }
 
-<!--  /* Карточки товаров */-->
-<!--  .product-card {-->
-<!--    background: white;-->
-<!--    width: 220px;-->
-<!--    border-radius: 12px;-->
-<!--    box-shadow: 0 4px 12px rgba(0,0,0,0.1);-->
-<!--    padding: 20px;-->
-<!--    text-align: center;-->
-<!--    color: #222;-->
-<!--    margin-bottom: 30px;-->
-<!--    cursor: pointer;-->
-<!--    transition: transform 0.2s, box-shadow 0.2s;-->
-<!--    text-decoration: none;-->
-<!--    display: block;-->
-<!--  }-->
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
 
-<!--  .product-card:hover {-->
-<!--    transform: translateY(-5px);-->
-<!--    box-shadow: 0 6px 16px rgba(0,0,0,0.15);-->
-<!--  }-->
+    .product-card h3 {
+        margin: 0 0 10px 0;
+    }
 
-<!--  .product-card h3 {-->
-<!--    margin: 0 0 10px 0;-->
-<!--  }-->
+    .product-card .price {
+        font-size: 24px;
+        margin: 15px 0;
+        color: #555;
+    }
 
-<!--  .product-card .price {-->
-<!--    font-size: 24px;-->
-<!--    margin: 15px 0;-->
-<!--    color: #555;-->
-<!--  }-->
+    .product-card p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+    }
 
-<!--  .product-card p {-->
-<!--    margin: 0;-->
-<!--    font-size: 14px;-->
-<!--    color: #666;-->
-<!--  }-->
+    .new-badge {
+        color: red;
+        font-size: 12px;
+        display: block;
+        margin-top: 10px;
+    }
 
-<!--  .new-badge {-->
-<!--    color: red;-->
-<!--    font-size: 12px;-->
-<!--    display: block;-->
-<!--    margin-top: 10px;-->
-<!--  }-->
-<!--</style>-->
-<!--<link href="/static/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">-->
-<!--</head>-->
-<!--<body>-->
-<!--  <div class="page-wrapper">-->
-<!--    &lt;!&ndash; Шапка (черная) &ndash;&gt;-->
-<!--    <header class="header">-->
-<!--      <a href="/" class="navbar-brand">МойМагазин</a>-->
-<!--    </header>-->
+    .product-image {
+        max-width: 100%;
+        height: 180px;
+        object-fit: contain;
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock %}
 
-<!--    &lt;!&ndash; Основной контейнер &ndash;&gt;-->
-<!--    <div class="main-container">-->
-<!--      &lt;!&ndash; Боковая панель (слева) &ndash;&gt;-->
-<!--      <nav class="sidebar">-->
-<!--        <a href="/">Главная</a>-->
-<!--        <a href="/categories">Категории</a>-->
-<!--        <a href="/orders">Заказы</a>-->
-<!--        <a href="/contacts">Контакты</a>-->
-<!--        <a href="/profile">Пользователь</a>-->
-<!--      </nav>-->
-
-<!--      &lt;!&ndash; Основное содержимое &ndash;&gt;-->
-<!--      <main class="main-content">-->
-<!--        <h1 class="page-title">Каталог товаров</h1>-->
-
-<!--        <div class="products-grid">-->
-<!--          {% for product in products %}-->
-<!--          <a href="/product/{{ product.id }}" class="product-card">-->
-<!--            <h3>{{ product.name }}</h3>-->
-<!--            <div class="price">{{ product.price }}$</div>-->
-<!--            <p>{{ product.description|truncatechars:100 }}</p>-->
-<!--            {% if product.is_new %}-->
-<!--              <span class="new-badge">Новинка!</span>-->
-<!--            {% endif %}-->
-<!--          </a>-->
-<!--          {% endfor %}-->
-<!--        </div>-->
-<!--      </main>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <script src="/static/js/bootstrap.bundle.min.js"></script>-->
-<!--</body>-->
-<!--</html>-->
+{% block extra_js %}
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

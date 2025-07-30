@@ -13,7 +13,8 @@ app_name = 'catalog'
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('products/', views.product_list, name='product_list'),  # New list view
     path('products/<int:product_id>/', views.product_detail, name='product_detail'),
     path('contacts/', views.contacts, name='contacts'),
-    path("menu/", views.new_menu, name = 'menu')
+    path("menu/", views.new_menu, name='menu')
 ]

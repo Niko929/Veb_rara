@@ -1,26 +1,27 @@
 {% extends "catalog/base.html" %}
-{% load static %}  <!-- Добавьте эту строку в начало шаблона -->
+{% load static %}
 
 {% block title %}Каталог товаров{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Каталог товаров</h1>
+<h1 class="mb-4">Каталог товаров</h1>
 
-<div class="products-grid">
+<div class="row row-cols-1 row-cols-md-3 g-4">
     {% for product in products %}
-    <a href="{% url 'catalog:product_detail' product.id %}" class="product-card">
-        {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
-        {% else %}
-            <img src="{% static 'images/default-product.png' %}" alt="No image" class="product-image">
-        {% endif %}
-        <h3>{{ product.name }}</h3>
-        <div class="price">{{ product.price }} руб.</div>
-        <p>{{ product.description|truncatechars:100 }}</p>
-        {% if product.is_new %}
-            <span class="new-badge">Новинка!</span>
-        {% endif %}
-    </a>
+    <div class="col">
+        <div class="card h-100">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% else %}
+            <img src="{% static 'images/default-product.png' %}" class="card-img-top" alt="No image">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.price }} руб.</p>
+                <a href="{% url 'catalog:product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
+            </div>
+        </div>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

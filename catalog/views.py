@@ -1,38 +1,40 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
+from django.views import View
 from .models import Product
-from django.views.generic import ListView
-from django.views.generic import FormView
-from django import forms
-from django.views.generic import TemplateView
+from django.views.generic import ListView, DetailView
 
-def home(request):
-    products = Product.objects.all()
-    # Передаем товары в шаблон
-    context = {
-        'products': products
-    }
-    return render(request, 'catalog/home.html',context)
+class HomeView(ListView):
+    model = Product
+    template_name = 'catalog/home.html'
+    context_object_name = 'products'
 
-def new_menu(request):
-    product = Product.objects.all()
-    return render(request, 'catalog/menu.html', {'product': product})
+class MenuView(ListView):
+    model = Product
+    template_name = 'catalog/menu.html'
+    context_object_name = 'product'
 
 
-def contact(request):
-    if request.method == 'POST':
+class ContactView(View):
+    template_name = 'catalog/contact.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
         name = request.POST.get("name")
         message = request.POST.get("message")
-        # Обработка данных формы
         return HttpResponse(f"Данные отправлены!{name}")
-    return render(request, 'catalog/contact.html')
 
 
-def product_list(request):
-    products = Product.objects.all()
-    return render(request, 'catalog/product_list.html', {'products': products})
+class ProductListView(ListView):
+    model = Product
+    template_name = 'catalog/product_list.html'
+    context_object_name = 'products'
 
-def product_detail(request, product_id):  # Имя параметра должно совпадать с URL
-    product = get_object_or_404(Product, id=product_id)
-    return render(request, 'catalog/product_detail.html', {'product': product})
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = 'catalog/product_detail.html'
+    context_object_name = 'product'
+    pk_url_kwarg = 'product_id'
 

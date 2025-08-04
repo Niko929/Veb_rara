@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% if object %}Редактирование{% else %}Создание{% endif %} статьи</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        {{ form.title.label_tag }}
+        {{ form.title }}
+        {% if form.title.errors %}
+        <div class="invalid-feedback d-block">
+            {{ form.title.errors }}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        {{ form.content.label_tag }}
+        {{ form.content }}
+    </div>
+    
+    <div class="mb-3">
+        {{ form.preview.label_tag }}
+        {{ form.preview }}
+    </div>
+    
+    <div class="mb-3 form-check">
+        {{ form.is_published }}
+        {{ form.is_published.label_tag }}
+    </div>
+    
+    <button type="submit" class="btn btn-primary">
+        {% if object %}Сохранить{% else %}Создать{% endif %}
+    </button>
+    <a href="{% if object %}{% url 'blog:post_detail' object.pk %}{% else %}{% url 'blog:post_list' %}{% endif %}" 
+       class="btn btn-outline-secondary">
+        Отмена
+    </a>
+</form>
+{% endblock %}

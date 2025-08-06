@@ -1,0 +1,179 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+<div class="page-wrapper">
+    <div class="main-container">
+        <main class="main-content">
+            <h1 class="page-title">Блог статей</h1>
+            
+            <div class="d-flex justify-content-end mb-4">
+                <a href="{% url 'blog:post_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Создать статью
+                </a>
+            </div>
+
+            <div class="posts-grid">
+                {% for post in object_list %}
+                <div class="post-card">
+                    <div class="post-header">
+                        {% if post.preview %}
+                            <img src="{{ post.preview.url }}" alt="{{ post.title }}" class="post-image">
+                        {% else %}
+                            <img src="{% static 'blog/images/default-post.png' %}" alt="No image available" class="post-image">
+                        {% endif %}
+                        
+                        {% if not post.is_published %}
+                            <span class="draft-badge">Черновик</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="post-body">
+                        <h3 class="post-title">
+                            <a href="{% url 'blog:post_detail' post.pk %}">{{ post.title }}</a>
+                        </h3>
+                        
+                        <div class="post-meta">
+                            <span class="post-date">
+                                <i class="far fa-calendar-alt me-1"></i>
+                                {{ post.created_at|date:"d.m.Y" }}
+                            </span>
+                            <span class="post-views ms-3">
+                                <i class="far fa-eye me-1"></i>
+                                {{ post.views_count }}
+                            </span>
+                        </div>
+                        
+                        <p class="post-excerpt">{{ post.content|truncatechars:150|striptags }}</p>
+                        
+                        <div class="post-actions">
+                            <a href="{% url 'blog:post_detail' post.pk %}" class="btn btn-sm btn-outline-primary">
+                                Читать
+                            </a>
+                            {% if user.is_staff %}
+                            <a href="{% url 'blog:post_update' post.pk %}" class="btn btn-sm btn-outline-secondary ms-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">Статей пока нет</div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if is_paginated %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                            &laquo; Назад
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                            Вперед &raquo;
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </main>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .post-card {
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    
+    .post-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+    
+    .post-header {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+    }
+    
+    .post-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .draft-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #ffc107;
+        color: #212529;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+    
+    .post-body {
+        padding: 1.5rem;
+    }
+    
+    .post-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .post-meta {
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+    
+    .post-excerpt {
+        color: #495057;
+        margin-bottom: 1.5rem;
+    }
+    
+    .page-title {
+        margin-bottom: 2rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'blog/js/post-interactions.js' %}"></script>
+{% endblock %}

@@ -13,3 +13,8 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name = 'Запись блога'
+        verbose_name_plural = 'Записи блога'
+        ordering = ['-created_at']  # Сортировка по дате (новые сначала)

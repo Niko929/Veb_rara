@@ -1,27 +1,50 @@
 {% extends "catalog/base.html" %}
 {% load static %}
+{% block title %}Список продуктов | МойМагазин{% endblock %}
 
-{% block title %}Каталог товаров{% endblock %}
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active" aria-current="page">Продукты</li>
+{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Каталог товаров</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Список продуктов</h1>
+    <a href="{% url 'product_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Добавить продукт
+    </a>
+</div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for product in products %}
-    <div class="col">
-        <div class="card h-100">
-            {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-            {% else %}
-            <img src="{% static 'images/default-product.png' %}" class="card-img-top" alt="No image">
-            {% endif %}
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text">{{ product.price }} руб.</p>
-                <a href="{% url 'catalog:product_detail' product.id %}" class="btn btn-primary">Подробнее</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Название</th>
+                <th>Цена</th>
+                <th>Дата создания</th>
+                <th class="text-end">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }} ₽</td>
+                <td>{{ product.created_at|date:"d.m.Y H:i" }}</td>
+                <td class="text-end table-actions">
+                    <a href="{% url 'product_update' product.pk %}" class="btn btn-sm btn-outline-warning me-1">
+                        <i class="bi bi-pencil"></i> Изменить
+                    </a>
+                    <a href="{% url 'product_delete' product.pk %}" class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i> Удалить
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Нет доступных продуктов</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from .models import Product
-from django.views.generic import ListView, DetailView
 from .forms import ProductForm
 
 class HomeView(ListView):
@@ -40,31 +41,27 @@ class ProductDetailView(DetailView):
     pk_url_kwarg = 'product_id'
 
 
-def product_create(request):
-    if request.method == 'POST':
-        form = ProductForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('product_list')
-    else:
-        form = ProductForm()
-    return render(request, 'products/product_form.html', {'form': form})
+class ProductCreateView(CreateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_form.html'
 
-def product_update(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    if request.method == 'POST':
-        form = ProductForm(request.POST, instance=product)
-        if form.is_valid():
-            form.save()
-            return redirect('product_list')
-    else:
-        form = ProductForm(instance=product)
-    return render(request, 'products/product_form.html', {'form': form})
+    def get_success_url(self):
+        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
 
-def product_delete(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    if request.method == 'POST':
-        product.delete()
-        return redirect('product_list')
-    return render(request, 'products/product_confirm_delete.html', {'product': product})
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = 'catalog/product_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('catalog:product_detail', kwargs={'pk': self.object.pk})
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    template_name = 'catalog/product_confirm_delete.html'
+    success_url = reverse_lazy('catalog:product_list')
+    context_object_name = 'product'
 

@@ -38,14 +38,21 @@ class ProductListView(ListView):
     template_name = 'catalog/product_list.html'
     context_object_name = 'products'
 
-class ProductDetailView(DetailView):
+
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'catalog/product_detail.html'
-    context_object_name = 'product'
-    pk_url_kwarg = 'product_id'
+    login_url = '/users/login/'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_staff'] = self.request.user.is_staff
+        return context
 
 
 class ProductCreateView(CreateView):
+    login_url = '/users/login/'
+    redirect_field_name = 'next'
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
@@ -57,6 +64,8 @@ class ProductCreateView(CreateView):
         return response
 
 class ProductUpdateView(UpdateView):
+    login_url = '/users/login/'
+    redirect_field_name = 'next'
     model = Product
     form_class = ProductForm
     template_name = 'catalog/product_form.html'
@@ -69,12 +78,27 @@ class ProductUpdateView(UpdateView):
 
 
 class ProductDeleteView(DeleteView):
+    login_url = '/users/login/'
+    redirect_field_name = 'next'
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:product_list')
     context_object_name = 'product'
 
-@login_required
-def product_manage(request, pk):
-    # Функциональное представление с защитой
-    pass
+
+@login_required(login_url='/users/login/')
+def product_detail(request, pk):
+    """
+    Представление для просмотра деталей продукта.
+    Доступно только авторизованным пользователям.
+    """
+    # Получаем продукт или возвращаем 404 если не найден
+    product = get_object_or_404(Product, pk=pk)
+
+    # Контекст для передачи данных в шаблон
+    context = {
+        'product': product,
+        'is_staff': request.user.is_staff  # Проверка прав администратора
+    }
+
+    return render(request, 'catalog/product_detail.html', context)

@@ -20,6 +20,44 @@
                 <ul class="navbar-nav me-auto">
                     {% include 'catalog/menu.html' %}
                 </ul>
+
+                <!-- Блок авторизации -->
+                <div class="d-flex">
+                    {% if user.is_authenticated %}
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light dropdown-toggle" type="button" id="userMenu"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if user.avatar %}
+                                    <img src="{{ user.avatar.url }}" alt="Аватар" class="rounded-circle me-2" width="30" height="30">
+                                {% else %}
+                                    <i class="bi bi-person-circle me-1"></i>
+                                {% endif %}
+                                {{ user.email }}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                <li><a class="dropdown-item" href="{% url 'users:profile' %}">
+                                    <i class="bi bi-person me-2"></i>Профиль
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="post" action="{% url 'users:logout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="bi bi-box-arrow-right me-2"></i>Выйти
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'users:login' %}" class="btn btn-outline-light me-2">
+                            <i class="bi bi-box-arrow-in-right"></i> Войти
+                        </a>
+                        <a href="{% url 'users:register' %}" class="btn btn-primary">
+                            <i class="bi bi-person-plus"></i> Регистрация
+                        </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </nav>
@@ -45,7 +83,6 @@
         {% block content %}{% endblock %}
     </div>
 
-
     <footer class="bg-dark text-white py-3 mt-4">
         <div class="container text-center">
             <p class="mb-0">&copy; {% now "Y" %} МойМагазин. Все права защищены.</p>
@@ -54,6 +91,5 @@
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     {% block extra_js %}{% endblock %}
-
 </body>
 </html>

@@ -1,7 +1,7 @@
 {% extends "catalog/base.html" %}
-{% load static humanize %}
+{% load static%}
 
-{% block title %}Список продуктов | МойМагазин{% endblock %}
+{% block title %}Список продуктов{% endblock %}
 
 {% block breadcrumb_items %}
 <li class="breadcrumb-item active" aria-current="page">Продукты</li>
@@ -33,7 +33,7 @@
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text text-muted mb-2">{{ product.description|truncatechars:60 }}</p>
                     <div class="d-flex justify-content-between align-items-center">
-                        <span class="h5 text-primary mb-0">{{ product.price|intcomma }} ₽</span>
+                        <span class="h5 text-primary mb-0">{{ product.price}} ₽</span>
                         <span class="text-muted small">{{ product.created_at|date:"d.m.Y" }}</span>
                     </div>
                 </div>

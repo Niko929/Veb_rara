@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Product
+from .models import Product, Category
 
 
 class ProductForm(forms.ModelForm):
@@ -11,7 +11,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price']
+        fields = ['category', 'name', 'description', 'price', 'image']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
             'price': forms.NumberInput(attrs={'step': '0.01', 'min': '0'})
@@ -44,11 +44,8 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Добавляем HTML5 атрибуты и классы для стилизации
-        self.fields['price'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': '0.00'
-        })
+        self.fields['category'].queryset = Category.objects.all()
+        self.fields['category'].required = True
 
     def clean_name(self):
         name = self.cleaned_data['name'].lower()

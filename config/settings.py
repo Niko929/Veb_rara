@@ -146,3 +146,10 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'nikolaek@kist.ru'
 EMAIL_HOST_PASSWORD = '12345@12'
 DEFAULT_FROM_EMAIL = 'your@email.com'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:8000/1',
+    }
+}

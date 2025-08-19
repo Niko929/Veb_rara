@@ -1,6 +1,7 @@
 from django.db import models
 
 class Category(models.Model):
+    DoesNotExist = None
     objects = None
     name = models.CharField(max_length=150, verbose_name='Наименование')
     description = models.TextField(max_length=150, verbose_name='Описание')

@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
@@ -8,7 +9,8 @@ from django.urls import reverse_lazy
 from pyexpat.errors import messages
 
 from .models import Product
-from .forms import ProductForm
+from .forms import ProductForm, StyleFormMixin, ModeratorForm
+
 
 class HomeView(ListView):
     model = Product
@@ -33,7 +35,7 @@ class ContactView(View):
         return HttpResponse(f"Данные отправлены!{name}")
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'catalog/product_list.html'
     context_object_name = 'products'
@@ -50,7 +52,7 @@ class ProductDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin ,CreateView):
     login_url = '/users/login/'
     redirect_field_name = 'next'
     model = Product
@@ -63,7 +65,7 @@ class ProductCreateView(CreateView):
         messages.success(self.request, 'Товар успешно создан!')
         return response
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin,UpdateView):
     login_url = '/users/login/'
     redirect_field_name = 'next'
     model = Product
@@ -76,6 +78,14 @@ class ProductUpdateView(UpdateView):
         messages.success(self.request, 'Изменения сохранены успешно!')
         return response
 
+    def get_form_class(self):
+        user = self.request.user
+        if user == self.object.categoru:
+            return StyleFormMixin
+        if user.has_perm("Product.can_review_categoru") and user.has_perm("Product.can_recommend_categoru"):
+            return ModeratorForm
+        raise PermissionDenied
+
 
 class ProductDeleteView(DeleteView):
     login_url = '/users/login/'
@@ -84,6 +94,8 @@ class ProductDeleteView(DeleteView):
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:product_list')
     context_object_name = 'product'
+
+
 
 
 @login_required(login_url='/users/login/')

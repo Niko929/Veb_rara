@@ -28,6 +28,10 @@ class Product(models.Model):
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
         ordering = ['name']
+        permissions = [
+            ("can_review_categoru", "Can review categoru"),
+            ("can_recommend_categoru", "Can recommend categoru"),
+        ]
 
     def __str__(self):
         return self.name

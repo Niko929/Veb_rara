@@ -2,7 +2,6 @@ from django.contrib.auth.views import LogoutView
 from django.urls import path
 from .views import HomeView, ProductListView, ProductDetailView, ContactView, MenuView, ProductUpdateView, \
     ProductDeleteView, ProductCreateView, product_detail
-
 app_name = 'catalog'
 
 urlpatterns = [

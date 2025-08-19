@@ -1,5 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import ModelForm
+
 from .models import Product, Category
 
 
@@ -60,3 +62,22 @@ class ProductForm(forms.ModelForm):
             if word in description:
                 raise forms.ValidationError(f'Описание содержит запрещенное слово: "{word}"')
         return self.cleaned_data['description']
+
+
+class StyleFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.set_field_styles()
+
+    def set_field_styles(self):
+        """Устанавливает классы CSS для всех полей формы"""
+        for field_name, field in self.fields.items():
+            # Добавляем стандартный класс form-control для всех полей
+            if 'class' not in field.widget.attrs:
+                field.widget.attrs['class'] = 'form-control'
+
+
+class ModeratorForm(StyleFormMixin , ModelForm):
+    class Meta:
+        model = Product
+        fields = ("description","name")

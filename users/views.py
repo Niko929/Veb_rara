@@ -1,15 +1,13 @@
 # Create your views here.
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
-from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings
-from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import UserRegisterForm, UserLoginForm
+
 
 
 def register(request):

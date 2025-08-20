@@ -41,6 +41,16 @@
                         <i class="bi bi-trash-fill"></i> Подтвердить удаление
                     </button>
                 </div>
+                <div class="container mt-4">
+                    <h2>Подтверждение удаления</h2>
+                    <p>Вы уверены, что хотите удалить продукт "{{ object.name }}"?</p>
+
+                    {% if is_moderator %}
+                    <div class="alert alert-warning">
+                        <strong>Внимание модератора!</strong> Вы удаляете чужой продукт.
+                    </div>
+                    {% endif %}
+                </div>
             </form>
         </div>
     </div>

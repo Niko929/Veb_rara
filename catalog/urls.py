@@ -17,4 +17,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('<int:pk>/manage/', product_detail, name='product_manage'),
     path('category/<slug:category_slug>/', views.CategoryProductsView.as_view(), name='category_products'),
+    path('api/product/<int:pk>/delete/', views.ProductDeleteAPIView.as_view(), name='product_delete_api'),
 ]

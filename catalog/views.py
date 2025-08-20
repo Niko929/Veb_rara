@@ -1,18 +1,21 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from pyexpat.errors import messages
+
+from .mixins import ProductDeleteMixin, ProductOwnerRequiredMixin
 from .models import Product
 from .forms import ProductForm, StyleFormMixin, ModeratorForm
 from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
+from .permissions import check_product_permissions
 from .services import get_products_by_category, get_category_by_slug
 
 
@@ -76,11 +79,11 @@ class ProductCreateView(LoginRequiredMixin ,CreateView):
     success_url = '/products/'  # или используйте get_success_url
 
     def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, 'Товар успешно создан!')
-        return response
+        # Автоматически назначаем текущего пользователя владельцем
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-class ProductUpdateView(LoginRequiredMixin,UpdateView):
+class ProductUpdateView(ProductOwnerRequiredMixin,UpdateView):
     login_url = '/users/login/'
     redirect_field_name = 'next'
     model = Product
@@ -102,13 +105,14 @@ class ProductUpdateView(LoginRequiredMixin,UpdateView):
         raise PermissionDenied
 
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(ProductDeleteMixin,DeleteView):
     login_url = '/users/login/'
     redirect_field_name = 'next'
     model = Product
     template_name = 'catalog/product_confirm_delete.html'
     success_url = reverse_lazy('catalog:product_list')
     context_object_name = 'product'
+
 
 
 
@@ -146,3 +150,46 @@ class CategoryProductsView(ListView):
         context = super().get_context_data(**kwargs)
         context['category'] = get_category_by_slug(self.category_slug)
         return context
+
+
+class ProductDeleteAPIView(LoginRequiredMixin, View):
+    """API endpoint для удаления продукта с проверкой прав"""
+
+    def post(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+
+        try:
+            check_product_permissions(request.user, product, "удаления")
+            product.delete()
+            return JsonResponse({
+                'success': True,
+                'message': 'Продукт успешно удален',
+                'redirect_url': '/catalog/products/'  # URL для перенаправления
+            })
+        except PermissionDenied as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e)
+            }, status=403)
+
+    def get(self, request, pk):
+        """GET запрос для получения информации о продукте перед удалением"""
+        product = get_object_or_404(Product, pk=pk)
+
+        try:
+            check_product_permissions(request.user, product, "просмотра прав удаления")
+            return JsonResponse({
+                'success': True,
+                'product': {
+                    'id': product.id,
+                    'name': product.name,
+                    'owner': product.owner.username if product.owner else None,
+                    'can_delete': True
+                }
+            })
+        except PermissionDenied as e:
+            return JsonResponse({
+                'success': False,
+                'error': str(e),
+                'can_delete': False
+            }, status=403)

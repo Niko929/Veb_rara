@@ -33,7 +33,6 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-# AUTH_USER_MODEL = 'users.User'
 AUTH_USER_MODEL ='users.User'
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,6 +44,8 @@ INSTALLED_APPS = [
     'catalog',
     'blog',
     'users.apps.UsersConfig',
+    'crispy_forms',
+    'crispy_bootstrap5'
 ]
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

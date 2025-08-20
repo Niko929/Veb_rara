@@ -1,5 +1,7 @@
+<!-- catalog/templates/catalog/product_detail.html -->
 {% extends "catalog/base.html" %}
 {% load static %}
+{% load permission_tags %}
 
 {% block title %}{{ product.name }} | {{ block.super }}{% endblock %}
 
@@ -32,6 +34,18 @@
                 <div class="card-body p-4">
                     <h1 class="product-title mb-3">{{ product.name }}</h1>
 
+                    <!-- Информация о владельце (только для авторизованных) -->
+                    {% if user.is_authenticated and product.owner %}
+                    <div class="owner-info mb-3">
+                        <p class="text-muted mb-1">
+                            <small>Владелец: {{ product.owner.username }}</small>
+                            {% if product.owner == user %}
+                                <span class="badge bg-info ms-2">Это ваш продукт</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% endif %}
+
                     <div class="d-flex align-items-center mb-4">
                         <span class="product-price fs-3 fw-bold text-primary me-3">{{ product.price }} ₽</span>
                         {% if product.old_price %}
@@ -55,12 +69,27 @@
                     </div>
                     {% endif %}
 
-                    <div class="d-flex flex-wrap gap-3 mt-4">
+                    <!-- Кнопки действий -->
+                    <div class="action-buttons mb-4">
+                        {% if user|can_edit:product or perms.catalog.change_product %}
+                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-pencil me-1"></i>Редактировать
+                        </a>
+                        {% endif %}
+
+                        {% if user|can_delete:product or perms.catalog.delete_product %}
+                        <a href="{% url 'catalog:product_delete' product.pk %}" class="btn btn-outline-danger me-2">
+                            <i class="bi bi-trash me-1"></i>Удалить
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-3">
                         <button class="btn btn-primary btn-lg flex-grow-1">
                             <i class="bi bi-cart-plus me-2"></i>В корзину
                         </button>
-                        <a href="{% url 'catalog:home' %}" class="btn btn-outline-secondary btn-lg">
-                            <i class="bi bi-arrow-left me-2"></i>Назад
+                        <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-secondary btn-lg">
+                            <i class="bi bi-arrow-left me-2"></i>Назад к каталогу
                         </a>
                     </div>
                 </div>
@@ -108,18 +137,57 @@
         padding: 0.75rem 1.5rem;
         font-size: 1.1rem;
     }
+    .action-buttons {
+        padding: 1rem 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+    .owner-info {
+        background-color: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 0.25rem;
+        border-left: 3px solid #0d6efd;
+    }
 </style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Можно добавить интерактивность для изображений
+    // Интерактивность для изображений
     const mainImage = document.getElementById('productImage');
 
     if (mainImage) {
         mainImage.addEventListener('click', function() {
             this.classList.toggle('zoomed');
+        });
+
+        // Добавляем стиль для увеличенного изображения
+        const style = document.createElement('style');
+        style.textContent = `
+            .product-main-image.zoomed {
+                transform: scale(1.8);
+                z-index: 1000;
+                position: relative;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Обработка кнопки "В корзину"
+    const addToCartBtn = document.querySelector('.btn-primary');
+    if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', function() {
+            this.innerHTML = '<i class="bi bi-check-circle me-2"></i>Добавлено';
+            this.classList.remove('btn-primary');
+            this.classList.add('btn-success');
+
+            // Возвращаем исходное состояние через 2 секунды
+            setTimeout(() => {
+                this.innerHTML = '<i class="bi bi-cart-plus me-2"></i>В корзину';
+                this.classList.remove('btn-success');
+                this.classList.add('btn-primary');
+            }, 2000);
         });
     }
 });

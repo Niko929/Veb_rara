@@ -13,6 +13,8 @@ from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
+from .services import get_products_by_category, get_category_by_slug
+
 
 class HomeView(ListView):
     model = Product
@@ -127,3 +129,20 @@ def product_detail(request, pk):
     }
 
     return render(request, 'catalog/product_detail.html', context)
+
+class CategoryProductsView(ListView):
+    """
+    Представление для отображения продуктов по категории
+    """
+    template_name = 'catalog/category_products.html'
+    context_object_name = 'products'
+    paginate_by = 12
+
+    def get_queryset(self):
+        self.category_slug = self.kwargs['category_slug']
+        return get_products_by_category(self.category_slug)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = get_category_by_slug(self.category_slug)
+        return context

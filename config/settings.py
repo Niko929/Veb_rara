@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+
 from django.conf.global_settings import AUTH_USER_MODEL
 from dotenv import load_dotenv
-
 import os
 from pathlib import Path
 
@@ -153,3 +153,4 @@ CACHES = {
         'LOCATION': 'redis://127.0.0.1:8000/1',
     }
 }
+CACHE_ENABLED = os.getenv('CACHE_ENABLED', 'True').lower() == 'true'

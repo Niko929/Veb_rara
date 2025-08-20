@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}Блог о технологиях, программировании и интересных находках{% endblock %}">
+    <title>{% block title %}ТехноБлог{% endblock %}</title>
+    {% load static %}
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'blog/css/fontawesome.min.css' %}" rel="stylesheet">
+    <style>
+        .bg-blog-primary {
+            background-color: #2c3e50;
+        }
+        .text-blog-primary {
+            color: #2c3e50;
+        }
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .tag-badge {
+            background-color: #e0f7fa;
+            color: #006064;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-blog-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'blog:post_list' %}">
+                <i class="fas fa-blog me-2"></i>
+                <span class="font-weight-bold">ТехноБлог</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'blog:post_list' %}">Статьи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:post_list' %}?category=programming">Программирование</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:post_list' %}?category=technology">Технологии</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'blog:post_create' %}" class="btn btn-outline-light me-2">
+                            <i class="fas fa-plus-circle"></i> Новая запись
+                        </a>
+                        <a href="{% url 'admin:index' %}" class="btn btn-light">
+                            <i class="fas fa-user-cog"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'admin:login' %}?next={{ request.path }}" class="btn btn-outline-light">
+                            <i class="fas fa-sign-in-alt"></i> Вход
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основное содержимое -->
+    <main class="container my-4 flex-grow-1">
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block breadcrumbs %}
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'blog:post_list' %}">Главная</a></li>
+                {% block breadcrumb_items %}{% endblock %}
+            </ol>
+        </nav>
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Подвал -->
+    <footer class="bg-dark text-white py-4 mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>О блоге</h5>
+                    <p class="small">ТехноБлог - это площадка для обмена знаниями о программировании и современных технологиях.</p>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>Разделы</h5>
+                    <ul class="list-unstyled small">
+                        <li><a href="{% url 'blog:post_list' %}" class="text-white">Все статьи</a></li>
+                        <li><a href="{% url 'blog:post_list' %}?category=programming" class="text-white">Программирование</a></li>
+                        <li><a href="{% url 'blog:post_list' %}?category=technology" class="text-white">Технологии</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Контакты</h5>
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-envelope me-2"></i> contact@technoblog.example</li>
+                        <li><i class="fab fa-github me-2"></i> github.com/technoblog</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="text-center small">
+                &copy; {% now "Y" %} ТехноБлог. Все права защищены.
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'blog/js/fontawesome.min.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
